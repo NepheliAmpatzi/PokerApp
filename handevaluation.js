@@ -3,7 +3,26 @@
 //       102, 103, 104, 111, 112, 113, 114, 121, 122, 123, 124, 131, 132, 133, 134, 
 //       141, 142, 143, 144];
 
+const suits = [
+  {code: 1, value: 'Hearts'}, 
+  {code: 2, value: 'Diamonds'}, 
+  {code: 3, value: 'Clubs'}, 
+  {code: 4, value: 'Spades'}
+];
+const ranks = [
+  {code: 2, value: 2}, {code: 3, value: 3}, {code: 4, value: 4},{code: 5, value: 5},
+  {code: 6, value: 6}, {code: 7, value: 7}, {code: 8, value: 8}, {code: 9, value: 9}, 
+  {code: 10, value: 10}, {code: 11, value: 'Jack'}, {code: 12, value: 'Queen'},
+  {code: 13, value: 'King'}, {code: 14, value: 'Ace'}
+];
+
 const randomHand = [142, 32, 122, 102, 112]
+
+function getCardLiteralsFromCardCode(cardCode){
+  const matchToRank = ranks.filter(rank => rank.code === Math.floor(cardCode/10))
+  const matchToSuit = suits.filter(suit => suit.code === Number(cardCode.toString().split('').pop()))
+  return {NumberL: matchToRank[0].value, SuitL: matchToSuit[0].value}
+}
 
 function checkForDescendingSequence(hand, difference) {
     const simplifiedCardCodes = hand
@@ -53,4 +72,5 @@ function CheckTheHand(hand) {
     }
 }
 
-CheckTheHand(randomHand)
+CheckTheHand(randomHand);
+getCardLiteralsFromCardCode(142);
