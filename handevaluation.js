@@ -78,40 +78,39 @@ function ReturnHighCard(hand) {
     return hand[0]
 }
 
-function CheckTheHand(hand) {
-    if (checkForDescendingSequenceAndSameSuit(hand, 10) &&
-        checkIfthereIsAce(hand)) {
-        console.log("FLUSH ROYAL!!!")
-        return true;
-    } else if (checkForDescendingSequenceAndSameSuit(hand, 10)) {
-        console.log('STRAIGHT FLUSH!')
-        return true;
-    } else if (CheckForCardOccurencies(hand, 4)) {
-        console.log('4 OF A KIND!')
-        return true
-    } else if (CheckForCardOccurencies(hand, 3) &&
-        CheckForCardOccurencies(hand, 2)) {
-        console.log('FULL HOUSE')
-        return true
-    } else if (CheckForSameSuit(hand)) {
-        console.log('FLUSH')
-        return true
-    } else if (checkForDescendingSequence(hand, 1)) {
-        console.log('SIMPLE STRAIGHT')
-        return true;
-    } else if (CheckForCardOccurencies(hand, 3)) {
-        console.log('3 OF A KIND!')
-        return true
-    } else if (CheckForTwoPairs(hand)) {
-        console.log('2 PAIRS!!!')
-        return true
-    } else if (CheckForCardOccurencies(hand, 2)) {
-        console.log('ONE PAIR')
-        return true
-    } else {
-        console.log('Your high card is ' + ReturnHighCard(hand))
-        return ReturnHighCard(hand)
-    }
+function CheckTheHand(hand){
+if(checkForDescendingSequenceAndSameSuit(hand,10)
+&&checkIfthereIsAce(hand)){
+  console.log("FLUSH ROYAL!!!")
+  return 1000;
+} else if(checkForDescendingSequenceAndSameSuit(hand,10)){
+  console.log('STRAIGHT FLUSH!')
+  return 900;
+} else if(CheckForCardOccurencies(hand, 4)){
+  console.log('4 OF A KIND!')
+  return 800
+} else if (CheckForCardOccurencies(hand, 3)
+&&CheckForCardOccurencies(hand, 2)){
+  console.log('FULL HOUSE')
+  return 700
+} else if(CheckForSameSuit(hand)){
+  console.log('FLUSH')
+  return 600
+} else if(checkForDescendingSequence(hand,1)){
+  console.log('SIMPLE STRAIGHT')
+  return 500;
+} else if(CheckForCardOccurencies(hand, 3)){
+  console.log('3 OF A KIND!')
+  return 400
+} else if(CheckForTwoPairs(hand)){
+  console.log('2 PAIRS!!!')
+  return 300
+} else if(CheckForCardOccurencies(hand, 2)){
+  console.log('ONE PAIR')
+  return 200
+} else {
+  console.log('Your high card is '+ ReturnHighCard(hand))
+  return ReturnHighCard(hand)
 }
-
-CheckTheHand(randomHand)
+}
+console.log(CheckTheHand(randomHand))
