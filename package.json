@@ -4,7 +4,7 @@
   "description": "Poker Application implementation in JavaScript",
   "main": "handevaluation.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node ./node_modules/karma/bin/karma start"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,13 @@
   "bugs": {
     "url": "https://github.com/NepheliAmpatzi/PokerApp/issues"
   },
-  "homepage": "https://github.com/NepheliAmpatzi/PokerApp#readme"
+  "homepage": "https://github.com/NepheliAmpatzi/PokerApp#readme",
+  "devDependencies": {
+    "browserify": "^16.3.0",
+    "jasmine-core": "^3.4.0",
+    "karma": "^4.2.0",
+    "karma-browserify": "^6.1.0",
+    "karma-chrome-launcher": "^3.0.0",
+    "karma-jasmine": "^2.0.1"
+  }
 }

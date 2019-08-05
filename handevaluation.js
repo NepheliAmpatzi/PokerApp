@@ -36,6 +36,7 @@ function checkForDescendingSequenceAndSameSuit(hand, difference) {
     .every(diff => diff === difference)
 }
 
+// Try improving this
 function checkIfthereIsAce(hand) {
   return hand.includes(141) ? true :
     hand.includes(142) ? true :
@@ -108,7 +109,7 @@ function CheckTheHand(hand) {
     return 200
   } else {
     console.log('Your high card is ' + ReturnHighCard(hand))
-    return ReturnHighCard(hand)
+    return 100
   }
 }
 
