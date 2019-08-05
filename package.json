@@ -1,0 +1,19 @@
+{
+  "name": "y",
+  "version": "0.0.1",
+  "description": "Poker Application implementation in JavaScript",
+  "main": "handevaluation.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NepheliAmpatzi/PokerApp.git"
+  },
+  "author": "Nefeli Ampatzi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NepheliAmpatzi/PokerApp/issues"
+  },
+  "homepage": "https://github.com/NepheliAmpatzi/PokerApp#readme"
+}
