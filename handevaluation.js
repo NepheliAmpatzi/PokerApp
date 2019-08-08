@@ -3,7 +3,7 @@
  * These are only suggestion that you are able to argue with! These are not rules but some better practices, or NOT.
  * Waiting for your news!
  */
-(function pokerEvaluationLibrary() {
+(function () {
   const { getSimplifiedCardCodesFromHand, } = require('./handEvaluation.helper');
 
   // handEvaluation filename in camel case maybe?
