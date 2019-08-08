@@ -1,6 +1,6 @@
 const {
-  CheckTheHand,
-} = require('../handevaluation.js');
+  getEvaluationResult,
+} = require('../handEvaluation.js');
 
 const {
   Card,
@@ -10,7 +10,7 @@ const {
 } = require('./handEvaluation.testHelper');
 
 
-describe('CheckTheHand should return the expected values', () => {
+describe('getEvaluationResult should return the expected values', () => {
 
   // #region Royal Flush
 
@@ -23,7 +23,7 @@ describe('CheckTheHand should return the expected values', () => {
       { card: Card._Ten, suit: Suit._Hearts },
     )
 
-    expect(CheckTheHand(royalFlushCardSet)).toEqual(EvaluationResult._Royal_Flush);
+    expect(getEvaluationResult(royalFlushCardSet)).toEqual(EvaluationResult._Royal_Flush);
   });
 
   it('should return flush royal (Hearts mixed)', () => {
@@ -35,7 +35,7 @@ describe('CheckTheHand should return the expected values', () => {
       { card: Card._Ace, suit: Suit._Hearts },
     )
 
-    expect(CheckTheHand(royalFlushCardSet)).toEqual(EvaluationResult._Royal_Flush);
+    expect(getEvaluationResult(royalFlushCardSet)).toEqual(EvaluationResult._Royal_Flush);
   });
 
   // #endregion Royal Flush
@@ -50,7 +50,7 @@ describe('CheckTheHand should return the expected values', () => {
       { card: Card._Nine, suit: Suit._Hearts },
     )
 
-    expect(CheckTheHand(royalFlushCardSet)).toEqual(EvaluationResult._Straight_Flush)
+    expect(getEvaluationResult(royalFlushCardSet)).toEqual(EvaluationResult._Straight_Flush)
   });
 
   it('should return straight Flush (Clubs mixed, may cause false positive on Flush Royal, hope not!)', () => {
@@ -62,7 +62,7 @@ describe('CheckTheHand should return the expected values', () => {
       { card: Card._Five, suit: Suit._Clubs },
     )
 
-    expect(CheckTheHand(straightFlushCardSet)).toEqual(EvaluationResult._Straight_Flush)
+    expect(getEvaluationResult(straightFlushCardSet)).toEqual(EvaluationResult._Straight_Flush)
   });
 
   // #endregion Straight Flush
@@ -77,7 +77,7 @@ describe('CheckTheHand should return the expected values', () => {
       { card: Card._Five, suit: Suit._Clubs },
     )
 
-    expect(CheckTheHand(fourOfAKindCardSet)).toEqual(EvaluationResult._Four_of_a_kind)
+    expect(getEvaluationResult(fourOfAKindCardSet)).toEqual(EvaluationResult._Four_of_a_kind)
   });
 
   it('should return four of a kind (king test)', () => {
@@ -89,7 +89,7 @@ describe('CheckTheHand should return the expected values', () => {
       { card: Card._Ace, suit: Suit._Clubs },
     )
 
-    expect(CheckTheHand(fourOfAKindCardSet)).toEqual(EvaluationResult._Four_of_a_kind)
+    expect(getEvaluationResult(fourOfAKindCardSet)).toEqual(EvaluationResult._Four_of_a_kind)
   });
 
   it('should return four of a kind (five test)', () => {
@@ -101,7 +101,7 @@ describe('CheckTheHand should return the expected values', () => {
       { card: Card._Queen, suit: Suit._Spades },
     )
 
-    expect(CheckTheHand(fourOfAKindCardSet)).toEqual(EvaluationResult._Four_of_a_kind)
+    expect(getEvaluationResult(fourOfAKindCardSet)).toEqual(EvaluationResult._Four_of_a_kind)
   });
 
   // #endregion Four of A Kind
@@ -116,7 +116,7 @@ describe('CheckTheHand should return the expected values', () => {
       { card: Card._Three, suit: Suit._Spades },
     )
 
-    expect(CheckTheHand(fullHouseCardSet)).toEqual(EvaluationResult._Full_House);
+    expect(getEvaluationResult(fullHouseCardSet)).toEqual(EvaluationResult._Full_House);
   });
 
   it('should return full house (kings and aces test)', () => {
@@ -128,7 +128,7 @@ describe('CheckTheHand should return the expected values', () => {
       { card: Card._King, suit: Suit._Spades },
     )
 
-    expect(CheckTheHand(fullHouseCardSet)).toEqual(EvaluationResult._Full_House);
+    expect(getEvaluationResult(fullHouseCardSet)).toEqual(EvaluationResult._Full_House);
   });
 
 
@@ -144,7 +144,7 @@ describe('CheckTheHand should return the expected values', () => {
       { card: Card._King, suit: Suit._Hearts },
     )
 
-    expect(CheckTheHand(flushCardSet)).toEqual(EvaluationResult._Flush);
+    expect(getEvaluationResult(flushCardSet)).toEqual(EvaluationResult._Flush);
   });
 
   it('should return flush (diamonds)', () => {
@@ -156,7 +156,7 @@ describe('CheckTheHand should return the expected values', () => {
       { card: Card._King, suit: Suit._Diamonds },
     )
 
-    expect(CheckTheHand(flushCardSet)).toEqual(EvaluationResult._Flush);
+    expect(getEvaluationResult(flushCardSet)).toEqual(EvaluationResult._Flush);
   });
 
   // #endregion Flush
@@ -171,7 +171,7 @@ describe('CheckTheHand should return the expected values', () => {
       { card: Card._King, suit: Suit._Diamonds },
     )
 
-    expect(CheckTheHand(straightCardSet)).toEqual(EvaluationResult._Straight);
+    expect(getEvaluationResult(straightCardSet)).toEqual(EvaluationResult._Straight);
   });
 
   it('should return straight (2 - 6)', () => {
@@ -183,7 +183,7 @@ describe('CheckTheHand should return the expected values', () => {
       { card: Card._Six, suit: Suit._Diamonds },
     )
 
-    expect(CheckTheHand(straightCardSet)).toEqual(EvaluationResult._Straight);
+    expect(getEvaluationResult(straightCardSet)).toEqual(EvaluationResult._Straight);
   });
 
   it('should return straight (1 - 5)', () => {
@@ -195,7 +195,7 @@ describe('CheckTheHand should return the expected values', () => {
       { card: Card._Ace, suit: Suit._Diamonds },
     )
 
-    expect(CheckTheHand(straightCardSet)).toEqual(EvaluationResult._Straight);
+    expect(getEvaluationResult(straightCardSet)).toEqual(EvaluationResult._Straight);
   });
   // #endregion Straight
 
@@ -209,7 +209,7 @@ describe('CheckTheHand should return the expected values', () => {
       { card: Card._Ace, suit: Suit._Diamonds },
     )
 
-    expect(CheckTheHand(threeOfAKindCardSet)).toEqual(EvaluationResult._Three_of_a_kind);
+    expect(getEvaluationResult(threeOfAKindCardSet)).toEqual(EvaluationResult._Three_of_a_kind);
   });
 
   it('should return threeOfAKind (aces)', () => {
@@ -221,7 +221,7 @@ describe('CheckTheHand should return the expected values', () => {
       { card: Card._Ace, suit: Suit._Diamonds },
     )
 
-    expect(CheckTheHand(threeOfAKindCardSet)).toEqual(EvaluationResult._Three_of_a_kind);
+    expect(getEvaluationResult(threeOfAKindCardSet)).toEqual(EvaluationResult._Three_of_a_kind);
   });
 
   it('should return threeOfAKind (Kings)', () => {
@@ -233,7 +233,7 @@ describe('CheckTheHand should return the expected values', () => {
       { card: Card._Ace, suit: Suit._Diamonds },
     )
 
-    expect(CheckTheHand(threeOfAKindCardSet)).toEqual(EvaluationResult._Three_of_a_kind);
+    expect(getEvaluationResult(threeOfAKindCardSet)).toEqual(EvaluationResult._Three_of_a_kind);
   });
   // #endregion Three of A Kind
 
@@ -247,7 +247,7 @@ describe('CheckTheHand should return the expected values', () => {
       { card: Card._Ace, suit: Suit._Diamonds },
     )
 
-    expect(CheckTheHand(twoPairsCardSet)).toEqual(EvaluationResult._Two_Pairs);
+    expect(getEvaluationResult(twoPairsCardSet)).toEqual(EvaluationResult._Two_Pairs);
   });
 
   it('should return twoPairs (Ones Twos)', () => {
@@ -259,7 +259,7 @@ describe('CheckTheHand should return the expected values', () => {
       { card: Card._Ace, suit: Suit._Diamonds },
     )
 
-    expect(CheckTheHand(twoPairsCardSet)).toEqual(EvaluationResult._Two_Pairs);
+    expect(getEvaluationResult(twoPairsCardSet)).toEqual(EvaluationResult._Two_Pairs);
   });
 
 
@@ -275,7 +275,7 @@ describe('CheckTheHand should return the expected values', () => {
       { card: Card._Ace, suit: Suit._Diamonds },
     )
 
-    expect(CheckTheHand(onePairCardSet)).toEqual(EvaluationResult._One_Pair);
+    expect(getEvaluationResult(onePairCardSet)).toEqual(EvaluationResult._One_Pair);
   });
 
   it('should return onePair (Kings with ace...)', () => {
@@ -287,7 +287,7 @@ describe('CheckTheHand should return the expected values', () => {
       { card: Card._Ace, suit: Suit._Diamonds },
     )
 
-    expect(CheckTheHand(onePairCardSet)).toEqual(EvaluationResult._One_Pair);
+    expect(getEvaluationResult(onePairCardSet)).toEqual(EvaluationResult._One_Pair);
   });
 
   it('should return onePair (Aces with two...)', () => {
@@ -299,7 +299,7 @@ describe('CheckTheHand should return the expected values', () => {
       { card: Card._Ace, suit: Suit._Diamonds },
     )
 
-    expect(CheckTheHand(onePairCardSet)).toEqual(EvaluationResult._One_Pair);
+    expect(getEvaluationResult(onePairCardSet)).toEqual(EvaluationResult._One_Pair);
   });
   // #endregion One Pair
 
@@ -313,7 +313,7 @@ describe('CheckTheHand should return the expected values', () => {
       { card: Card._Ace, suit: Suit._Diamonds },
     )
 
-    expect(CheckTheHand(highCardCardSet)).toEqual(EvaluationResult._High_Card);
+    expect(getEvaluationResult(highCardCardSet)).toEqual(EvaluationResult._High_Card);
   });
 
   it('should return highCard (10)', () => {
@@ -325,7 +325,7 @@ describe('CheckTheHand should return the expected values', () => {
       { card: Card._Nine, suit: Suit._Diamonds },
     )
 
-    expect(CheckTheHand(highCardCardSet)).toEqual(EvaluationResult._High_Card);
+    expect(getEvaluationResult(highCardCardSet)).toEqual(EvaluationResult._High_Card);
   });
 
   it('should return highCard (King)', () => {
@@ -337,7 +337,7 @@ describe('CheckTheHand should return the expected values', () => {
       { card: Card._Six, suit: Suit._Diamonds },
     )
 
-    expect(CheckTheHand(highCardCardSet)).toEqual(EvaluationResult._High_Card);
+    expect(getEvaluationResult(highCardCardSet)).toEqual(EvaluationResult._High_Card);
   });
   // #endregion High Card
 
