@@ -11,27 +11,36 @@ const ranks = [
     { code: 13, value: 'King' }, { code: 14, value: 'Ace' }
 ];
 
+const randomHand = [144, 144, 134, 124, 54];
+const specialCase = [14, 5, 4, 3, 2];
+
+function SimplifiedCardCodes(hand) {
+    return hand
+        .map(card => Math.floor(card / 10))
+        .sort((a, b) => b - a);
+}
 
 function getCardLiteralsFromCardCode(cardCode) {
-    const matchToRank = ranks.filter(rank => rank.code === Math.floor(cardCode / 10))
-    const matchToSuit = suits.filter(suit => suit.code === Number(cardCode.toString().split('').pop()))
-    return { NumberL: matchToRank[0].value, SuitL: matchToSuit[0].value }
+    const matchToRank = ranks.find(rank => rank.code === Math.floor(cardCode / 10))
+    const matchToSuit = suits.find(suit => suit.code === Number(cardCode.toString().split('').pop()))
+    return { NumberL: matchToRank.value, SuitL: matchToSuit.value }
 }
 
 function checkForDescendingSequence(hand, difference) {
-    const simplifiedCardCodes = hand.map(card => Math.floor(card / 10));
-    hand.sort((a, b) => b - a)
-    const newarray = [14, 5, 4, 3, 2];
-    if (JSON.stringify(newarray) === JSON.stringify(simplifiedCardCodes)) simplifiedCardCodes[0] = 1
-    return simplifiedCardCodes
+    const SimplifiedCardCodes = hand
+        .map(card => Math.floor(card / 10))
+        .sort((a, b) => b - a);
+    if (JSON.stringify(specialCase) === JSON.stringify(SimplifiedCardCodes)) SimplifiedCardCodes[0] = 1
+    return SimplifiedCardCodes
         .sort((a, b) => b - a)
         .slice(1)
-        .map((card, i) => simplifiedCardCodes[i] - card)
+        .map((card, i) => SimplifiedCardCodes[i] - card)
         .every(diff => diff === difference);
 }
 
 function checkIfthereIsAce(hand) {
-    return hand.map(card => Math.floor(card / 10)).includes(14)
+    if (JSON.stringify(specialCase) === JSON.stringify(SimplifiedCardCodes(hand))) return false
+    return hand.map(card => Math.floor(card / 10)).includes(14);
 }
 
 function CheckForSameSuit(hand) {
@@ -40,11 +49,16 @@ function CheckForSameSuit(hand) {
 }
 
 function CheckForCardOccurencies(hand, times) {
-    const simplifiedCardCodes = hand.map(card => Math.floor(card / 10))
-    return simplifiedCardCodes
-        .map(item => simplifiedCardCodes
+    return SimplifiedCardCodes(hand)
+        .map(item => SimplifiedCardCodes(hand)
             .filter(other => item === other))
         .filter(content => content.length === times).length === times ? true : false
+}
+
+function CheckHandOccurencies(hand) {
+    return function(times) {
+        return CheckForCardOccurencies(hand, times)
+    }
 }
 
 function CheckForTwoPairs(hand) {
@@ -63,43 +77,25 @@ function ReturnHighCard(hand) {
 }
 
 function CheckTheHand(hand) {
-    if (checkForDescendingSequence(hand, 1) &&
-        CheckForSameSuit(hand) &&
-        checkIfthereIsAce(hand)) {
-        console.log("FLUSH ROYAL!!!")
-        return 1000;
-    } else if (checkForDescendingSequence(hand, 1) &&
-        CheckForSameSuit(hand)) {
-        console.log('STRAIGHT FLUSH!')
-        return 900;
-    } else if (CheckForCardOccurencies(hand, 4)) {
-        console.log('4 OF A KIND!')
-        return 800
-    } else if (CheckForCardOccurencies(hand, 3) &&
-        CheckForCardOccurencies(hand, 2)) {
-        console.log('FULL HOUSE')
-        return 700
-    } else if (CheckForSameSuit(hand)) {
-        console.log('FLUSH')
-        return 600
-    } else if (checkForDescendingSequence(hand, 1)) {
-        console.log('SIMPLE STRAIGHT')
-        return 500;
-    } else if (CheckForCardOccurencies(hand, 3)) {
-        console.log('3 OF A KIND!')
-        return 400
-    } else if (CheckForTwoPairs(hand)) {
-        console.log('2 PAIRS!!!')
-        return 300
-    } else if (CheckForCardOccurencies(hand, 2)) {
-        console.log('ONE PAIR')
-        return 200
-    } else {
-        console.log('Your high card is ' + ReturnHighCard(hand))
-        return 100
-    }
+    const hasDescSeq = checkForDescendingSequence(hand, 1);
+    const hasSameSuit = CheckForSameSuit(hand);
+    const thereIsAce = checkIfthereIsAce(hand);
+    const Occurencies = CheckHandOccurencies(hand);
+
+    if (hasDescSeq && hasSameSuit && thereIsAce) return 1000;
+    if (hasDescSeq && hasSameSuit) return 900;
+    if (Occurencies(4)) return 800;
+    if (Occurencies(3) && Occurencies(2)) return 700;
+    if (hasSameSuit) return 600
+    if (hasDescSeq) return 500;
+    if (Occurencies(3)) return 400
+    if (CheckForTwoPairs(hand)) return 300
+    if (Occurencies(2)) return 200
+    else ReturnHighCard(hand);
+    return 100
 }
 
+console.log(CheckTheHand(randomHand))
 module.exports = {
     CheckTheHand,
     getCardLiteralsFromCardCode,
