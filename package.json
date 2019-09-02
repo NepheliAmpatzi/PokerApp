@@ -1,27 +1,17 @@
 {
-  "name": "y",
-  "version": "0.0.1",
-  "description": "Poker Application implementation in JavaScript",
-  "main": "handevaluation.ts",
+  "name": "my-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-scripts": "0.9.5"
+  },
+  "devDependencies": {},
   "scripts": {
-    "test": "node ./node_modules/karma/bin/karma start"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/NepheliAmpatzi/PokerApp.git"
-  },
-  "author": "Nefeli Ampatzi",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/NepheliAmpatzi/PokerApp/issues"
-  },
-  "homepage": "https://github.com/NepheliAmpatzi/PokerApp#readme",
-  "devDependencies": {
-    "browserify": "^16.3.0",
-    "jasmine-core": "^3.4.0",
-    "karma": "^4.2.0",
-    "karma-browserify": "^6.1.0",
-    "karma-chrome-launcher": "^3.0.0",
-    "karma-jasmine": "^2.0.1"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
   }
 }

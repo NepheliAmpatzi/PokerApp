@@ -1,17 +1,16 @@
 const suits = [
-    { code: 1, value: 'Hearts' },
-    { code: 2, value: 'Diamonds' },
-    { code: 3, value: 'Clubs' },
-    { code: 4, value: 'Spades' }
+    { code: 1, value: 'hearts' },
+    { code: 2, value: 'diams' },
+    { code: 3, value: 'clubs' },
+    { code: 4, value: 'spades' }
 ];
 const ranks = [
     { code: 2, value: 2 }, { code: 3, value: 3 }, { code: 4, value: 4 }, { code: 5, value: 5 },
     { code: 6, value: 6 }, { code: 7, value: 7 }, { code: 8, value: 8 }, { code: 9, value: 9 },
-    { code: 10, value: 10 }, { code: 11, value: 'Jack' }, { code: 12, value: 'Queen' },
-    { code: 13, value: 'King' }, { code: 14, value: 'Ace' }
+    { code: 10, value: 10 }, { code: 11, value: 'J' }, { code: 12, value: 'Q' },
+    { code: 13, value: 'K' }, { code: 14, value: 'A' }
 ];
 
-const randomHand = [144, 144, 134, 124, 54];
 const specialCase = [14, 5, 4, 3, 2];
 
 function SimplifiedCardCodes(hand) {
@@ -95,8 +94,9 @@ function CheckTheHand(hand) {
     return 100
 }
 
-console.log(CheckTheHand(randomHand))
-module.exports = {
+export default {
     CheckTheHand,
     getCardLiteralsFromCardCode,
+    suits,
+    ranks
 }
