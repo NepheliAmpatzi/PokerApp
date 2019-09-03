@@ -64,7 +64,7 @@ class App extends Component {
             uniqueselectedCards: [],
             npcBet: '',
             playerBet: '',
-            startingMoney: 1000,
+            disableBtn: false,
             currentNpcBalance: 1000,
             currentPlayerBalance: 1000,
             playerWins: false,
@@ -80,6 +80,7 @@ class App extends Component {
         this.callCb = this.callCb.bind(this);
         this.foldCb = this.foldCb.bind(this);
         this.startNewGame = this.startNewGame.bind(this);
+        this.changeCards = this.changeCards.bind(this);
         
     }
 
@@ -91,24 +92,24 @@ class App extends Component {
             }))
             const uniquepickedcards = [...new Set(this.state.allselectedCards)]
             await this.setState({uniqueselectedCards: uniquepickedcards})
-            if(this.state.cardInfo.selected &&
-                this.state.uniqueselectedCards.length <= 3){
-                    this.handleCardInfo();
-                }
         }
     }
 
-    handleCardInfo(){
+    changeCards(){
         let playerhand = this.state.playerHand;
         let uniquecards = this.state.uniqueselectedCards;
         let randomCards = drawCards(this.state.deck, uniquecards.length);
-        let index = playerhand.indexOf(this.state.cardInfo.cardCode)
-        if(this.state.cardInfo.selected &&
-            this.state.uniqueselectedCards.length <= 3 &&
-            uniquecards.map(card => playerhand.includes(card))){
-            playerhand.splice(index, 1, randomCards[0])   
+        let newhand;
+        if(this.state.cardInfo.selected && this.state.uniqueselectedCards.length <= 3){
+            uniquecards.forEach(card => {
+                if(playerhand.indexOf(card) > -1){
+                    playerhand.splice(playerhand.indexOf(card), 
+                    uniquecards.length)
+                    newhand = playerhand.concat(randomCards)
+                }
+            })
         }
-        this.setState({ playerHand: playerhand })
+        this.setState({ playerHand: newhand , disableBtn: true}) 
     }
 
     async callCb(){
@@ -183,6 +184,8 @@ class App extends Component {
                     onClick={this.callCb}
                     foldCb={this.foldCb}
                     startNewGame={this.startNewGame}
+                    disableBtn={this.state.disableBtn}
+                    changeCards={this.changeCards}
                 />
                 <Hand 
                     class="player-hand" 

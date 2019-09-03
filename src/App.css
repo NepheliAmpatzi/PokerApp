@@ -64,6 +64,11 @@ body {
     background-color: #a13e2d;
     border: 1px solid #7d3023;
   }
+
+  .change-cards-btn {
+    background-color: sienna;
+    border: 1px solid sienna;
+  }
   
   .first-row-container {
     display: grid;
@@ -88,12 +93,12 @@ body {
   }
   
   .player-hand {
-    margin: 0 0 0 35%;
+    margin: 0 0 0 35vw;
     display: flex;
   }
   
   .npc-hand {
-    margin: 1% 0 0 35%;
+    margin: 1vh 0 0 35%;
     display: flex;
   }
   

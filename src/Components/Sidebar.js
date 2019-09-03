@@ -77,6 +77,11 @@ class Sidebar extends Component{
                     class='new-game-btn' 
                     name='Start New Game'
                     onClick={this.props.startNewGame}/>
+                <Button 
+                    class='change-cards-btn' 
+                    name='Change Cards'
+                    onClick={this.props.changeCards}
+                    disableBtn={this.props.disableBtn}/>
             </div>
         );
     }
