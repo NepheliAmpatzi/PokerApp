@@ -13,6 +13,10 @@ body {
     background-color: #04692e;
   }
   
+.app-style{
+  height: 10vh;
+}
+
   .gameplay-button-group button {
     color: white;
     padding: 15px 32px;
@@ -22,11 +26,8 @@ body {
     cursor: pointer;
     width: 150px;
     display: block;
+    margin-top: -1vmax !important;
     margin: 1vw;
-  }
-  
-  .gameplay-button-group {
-    width: 3em;
   }
   
   .raise-btn {
@@ -39,7 +40,7 @@ body {
     font-size: 16px;
     width: 82px;
     display: block;
-    margin: -0.9vw 0 0 1vw;
+    margin: 1vw;
   }
   
   .bet-placeholder {
@@ -93,12 +94,12 @@ body {
   }
   
   .player-hand {
-    margin: 0 0 0 35vw;
+    margin: -20vh 0 0 30vw;
     display: flex;
   }
   
   .npc-hand {
-    margin: 1vh 0 0 35%;
+    margin: 1vh 0 0 30vw;
     display: flex;
   }
   

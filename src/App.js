@@ -53,6 +53,7 @@ function compareTwoHands(player, npc){
 }
 const deck = shuffleDeck(generateDeck());
 
+
 class App extends Component {
     constructor(props){
         super(props)
@@ -95,21 +96,17 @@ class App extends Component {
         }
     }
 
-    changeCards(){
+    async changeCards(){
         let playerhand = this.state.playerHand;
         let uniquecards = this.state.uniqueselectedCards;
         let randomCards = drawCards(this.state.deck, uniquecards.length);
-        let newhand;
         if(this.state.cardInfo.selected && this.state.uniqueselectedCards.length <= 3){
-            uniquecards.forEach(card => {
-                if(playerhand.indexOf(card) > -1){
-                    playerhand.splice(playerhand.indexOf(card), 
-                    uniquecards.length)
-                    newhand = playerhand.concat(randomCards)
-                }
-            })
+            playerhand = playerhand.map(card => uniquecards.includes(card) ? randomCards.pop() : card )
+            await this.setState({ 
+                playerHand: playerhand, 
+                disableBtn: true
+            }) 
         }
-        this.setState({ playerHand: newhand , disableBtn: true}) 
     }
 
     async callCb(){
@@ -158,6 +155,7 @@ class App extends Component {
             npcHand: drawCards(shuffleDeck(generateDeck()), 5),
             allselectedCards: [],
             uniqueselectedCards: [],
+            npcBet: '',
             playerWins: false,
             npcWins: false,
             tie: false,
@@ -170,7 +168,7 @@ class App extends Component {
 
     render() {
         return (
-            <div>
+            <div className="app-style">
                 <Hand 
                     class="npc-hand" 
                     npc={true} 
@@ -186,6 +184,7 @@ class App extends Component {
                     startNewGame={this.startNewGame}
                     disableBtn={this.state.disableBtn}
                     changeCards={this.changeCards}
+                    emptyInputs={this.state.npcBet}
                 />
                 <Hand 
                     class="player-hand" 

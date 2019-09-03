@@ -54,20 +54,16 @@ class Sidebar extends Component{
                     class='fold-btn' 
                     name='Fold'
                     onClick={this.props.foldCb}/>
-                <br/>
-                <br/>
-                <br/>
                 <div className='text-style'>NPC bet</div>
                 <Placeholder 
                     class='bet-placeholder' 
                     readOnly={true} 
-                    value={this.state.npcBetPlaceholder}/>
+                    value={this.props.emptyInputs}/>
                 <div className='text-style'>Player bet</div>
                 <Placeholder 
                     class='bet-placeholder' 
                     readOnly={true} 
                     value={this.state.playerPlaceholder}/>
-                <br/>
                 <div className='text-style'>Total amount</div>
                 <Placeholder 
                     class='bet-placeholder'
