@@ -156,6 +156,7 @@ class App extends Component {
         this.setState({
             playerHand: drawCards(shuffleDeck(generateDeck()), 5),
             npcHand: drawCards(shuffleDeck(generateDeck()), 5),
+            disableBtn: false,
             allselectedCards: [],
             uniqueselectedCards: [],
             playerWins: false,
