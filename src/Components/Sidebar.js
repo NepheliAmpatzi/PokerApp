@@ -10,7 +10,7 @@ class Sidebar extends Component{
             npcBetPlaceholder: '',
             playerPlaceholder: '',
             raiseInput: '',
-            totalBetAmount: '',
+            totalBetAmount: ''
 
         }
         this.receiveRaiseAmount = this.receiveRaiseAmount.bind(this);
@@ -32,6 +32,7 @@ class Sidebar extends Component{
         await this.setState({
             raiseInput: dataFromChild
         })
+        this.props.sendInfo(this.state.raiseInput)
     }
 
     render(){
@@ -45,6 +46,7 @@ class Sidebar extends Component{
                     class='raise-placeholder' 
                     parentCb={this.receiveRaiseAmount} 
                     readOnly={false}
+                    value={this.state.raiseInput}
                     />
                 <Button 
                     class='call-btn' 
@@ -63,12 +65,12 @@ class Sidebar extends Component{
                 <Placeholder 
                     class='bet-placeholder' 
                     readOnly={true} 
-                    value={this.state.playerPlaceholder}/>
+                    value={this.props.emptyInputs}/>
                 <div className='text-style'>Total amount</div>
                 <Placeholder 
                     class='bet-placeholder'
                     readOnly={true} 
-                    value={this.state.totalBetAmount}/>
+                    value={this.props.emptyInputs}/>
                 <Button 
                     class='new-game-btn' 
                     name='Start New Game'

@@ -53,7 +53,6 @@ function compareTwoHands(player, npc){
 }
 const deck = shuffleDeck(generateDeck());
 
-
 class App extends Component {
     constructor(props){
         super(props)
@@ -63,9 +62,10 @@ class App extends Component {
             deck: deck,
             allselectedCards: [],
             uniqueselectedCards: [],
+            raiseAmount: '',
             npcBet: '',
             playerBet: '',
-            disableBtn: false,
+            disableBtn: true,
             currentNpcBalance: 1000,
             currentPlayerBalance: 1000,
             playerWins: false,
@@ -82,6 +82,7 @@ class App extends Component {
         this.foldCb = this.foldCb.bind(this);
         this.startNewGame = this.startNewGame.bind(this);
         this.changeCards = this.changeCards.bind(this);
+        this.receiveRaiseInfo = this.receiveRaiseInfo.bind(this);
         
     }
 
@@ -93,6 +94,10 @@ class App extends Component {
             }))
             const uniquepickedcards = [...new Set(this.state.allselectedCards)]
             await this.setState({uniqueselectedCards: uniquepickedcards})
+            if(this.state.cardInfo.selected && this.state.uniqueselectedCards.length <= 3){
+                await this.setState({disableBtn: false})
+            }
+            console.log(this.state.uniqueselectedCards)
         }
     }
 
@@ -104,9 +109,11 @@ class App extends Component {
             playerhand = playerhand.map(card => uniquecards.includes(card) ? randomCards.pop() : card )
             await this.setState({ 
                 playerHand: playerhand, 
-                disableBtn: true
-            }) 
+                disableBtn: true,
+                uniqueselectedCards: []
+            })
         }
+        console.log(this.state.playerHand)
     }
 
     async callCb(){
@@ -131,8 +138,8 @@ class App extends Component {
         playerBet: dataFromChild
     })
     await this.setState({
-        currentNpcBalance: this.state.currentNpcBalance - this.state.npcBet,
-        currentPlayerBalance: this.state.currentPlayerBalance - this.state.playerBet
+        currentNpcBalance: this.state.currentNpcBalance - this.state.raiseAmount,
+        currentPlayerBalance: this.state.currentPlayerBalance - this.state.raiseAmount
     })
     }
 
@@ -147,6 +154,12 @@ class App extends Component {
                 currentNpcBalance: this.state.currentNpcBalance + this.state.playerBet + this.state.npcBet
             })
         }
+    }
+
+    receiveRaiseInfo(dataFromChild){
+        this.setState({
+            raiseAmount: dataFromChild
+        })
     }
 
     startNewGame(){
@@ -186,6 +199,7 @@ class App extends Component {
                     disableBtn={this.state.disableBtn}
                     changeCards={this.changeCards}
                     emptyInputs={this.state.npcBet}
+                    sendInfo={this.receiveRaiseInfo}
                 />
                 <Hand 
                     class="player-hand" 
@@ -193,6 +207,8 @@ class App extends Component {
                     cards={this.state.playerHand}
                     parentcb={this.getCardInfoFromChild}
                     value={this.state.currentPlayerBalance}
+                    selectedCards={this.state.uniqueselectedCards}
+                    player={this.state.playerHand}
                 />
             </div>
         );

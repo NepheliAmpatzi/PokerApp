@@ -33,6 +33,8 @@ class Hand extends Component{
                 {this.props.cards.map((card, i) => <Card 
                     parentcb={this.getCardInfoFromChild} 
                     key={i} 
+                    selectedCards={this.props.selectedCards}
+                    player={this.props.player}
                     npc={this.props.npc} 
                     cardCode={card}
                     />)}
