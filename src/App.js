@@ -52,6 +52,7 @@ function compareTwoHands(player, npc){
     }
 }
 const deck = shuffleDeck(generateDeck());
+const indexes = [];
 
 class App extends Component {
     constructor(props){
@@ -62,6 +63,8 @@ class App extends Component {
             deck: deck,
             allselectedCards: [],
             uniqueselectedCards: [],
+            selectedCardIndexes: [],
+            indexOccurencies: {},
             raiseAmount: '',
             npcBet: '',
             playerBet: '',
@@ -94,18 +97,31 @@ class App extends Component {
             }))
             const uniquepickedcards = [...new Set(this.state.allselectedCards)]
             await this.setState({uniqueselectedCards: uniquepickedcards})
-            if(this.state.cardInfo.selected && this.state.uniqueselectedCards.length <= 3){
+            indexes.push(this.state.playerHand.indexOf(this.state.cardInfo.cardCode))
+            await this.setState({selectedCardIndexes: indexes})
+            const occurencies = this.giveSelectedCardIndexesOccurencies(this.state.selectedCardIndexes);
+            await this.setState({indexOccurencies: occurencies})
+            if(this.state.cardInfo.selected 
+                && this.state.uniqueselectedCards.length <= 3
+                && Object.values(this.state.indexOccurencies).every(value => value === 1)){
                 await this.setState({disableBtn: false})
             }
-            console.log(this.state.uniqueselectedCards)
         }
+    }
+
+    giveSelectedCardIndexesOccurencies(list){
+        const countIndexes = list.reduce(function(obj, b) {
+            obj[b] = ++obj[b] || 1;
+            return obj;
+          }, {});
+        return countIndexes;
     }
 
     async changeCards(){
         let playerhand = this.state.playerHand;
         let uniquecards = this.state.uniqueselectedCards;
         let randomCards = drawCards(this.state.deck, uniquecards.length);
-        if(this.state.cardInfo.selected && this.state.uniqueselectedCards.length <= 3){
+        if(this.state.cardInfo.selected && this.state.uniqueselectedCards.length <= 3 ){
             playerhand = playerhand.map(card => uniquecards.includes(card) ? randomCards.pop() : card )
             await this.setState({ 
                 playerHand: playerhand, 
@@ -118,8 +134,8 @@ class App extends Component {
 
     async callCb(){
     let result = compareTwoHands(
-        handevaluation.CheckTheHand(this.state.playerHand), 
-        handevaluation.CheckTheHand(this.state.npcHand))
+        handevaluation.getEvaluationResult(this.state.playerHand), 
+        handevaluation.getEvaluationResult(this.state.npcHand))
     if(result === 100) await this.setState({playerWins: true})
     if(result === 0) await this.setState({npcWins: true})
     this.betApportionment(this.state.playerWins, this.state.npcWins)
@@ -128,7 +144,8 @@ class App extends Component {
     foldCb(){
         alert("You lose :(");
         this.setState({
-            npcWins: true
+            npcWins: true,
+            disableBtn: true
         })
     }
 
@@ -183,7 +200,9 @@ class App extends Component {
     render() {
         return (
             <div className="app-style">
-                <Hand 
+                <Hand
+                    labelStyle="npc-label-style"
+                    label="NPC Balance"
                     class="npc-hand" 
                     npc={true} 
                     cards={this.state.npcHand}
@@ -202,6 +221,8 @@ class App extends Component {
                     sendInfo={this.receiveRaiseInfo}
                 />
                 <Hand 
+                    label="Player Balance"
+                    labelStyle="player-label-style"
                     class="player-hand" 
                     npc={false} 
                     cards={this.state.playerHand}
@@ -209,6 +230,7 @@ class App extends Component {
                     value={this.state.currentPlayerBalance}
                     selectedCards={this.state.uniqueselectedCards}
                     player={this.state.playerHand}
+                    selectedCardOccurencies={this.state.indexOccurencies}
                 />
             </div>
         );

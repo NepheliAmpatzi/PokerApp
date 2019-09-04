@@ -25,12 +25,16 @@ class Hand extends Component{
     render() {
         return ( 
             <div className={this.props.class}>
+            <div>
+            <div className={this.props.labelStyle}>{this.props.label}</div>
             <Placeholder 
                 class={this.props.npc ? "npc-placeholder" : "player-placeholder"}
                 value={this.props.value}
                 readOnly={this.props.readOnly}
                 />
+            </div>
                 {this.props.cards.map((card, i) => <Card 
+                    selectedCardOccurencies={this.props.selectedCardOccurencies}
                     parentcb={this.getCardInfoFromChild} 
                     key={i} 
                     selectedCards={this.props.selectedCards}
