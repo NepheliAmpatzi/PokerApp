@@ -17,7 +17,13 @@ body {
   height: 10vh;
 }
 
+.gameplay-button-group {
+  position: absolute;
+  top: 25px;
+}
+
   .gameplay-button-group button {
+    bottom: 25px;
     color: white;
     padding: 15px 32px;
     text-align: center;
@@ -94,6 +100,8 @@ body {
   }
   
   .player-hand {
+    position: absolute;
+    bottom: 0px;
     margin: -20vh 0 0 30vw;
     display: flex;
   }

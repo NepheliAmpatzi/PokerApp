@@ -32,8 +32,8 @@ class Card extends Component{
         return suitHtml;
     }
 
-    async selectedCard(){
-        await this.setState({selected: true})
+    selectedCard(){
+        this.setState({selected: true})
         let cardinformation = {
             cardCode: this.props.cardCode, 
             selected: this.state.selected
