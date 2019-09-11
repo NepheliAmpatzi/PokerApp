@@ -2,72 +2,26 @@ import React, { Component } from 'react';
 import './App.css';
 import Sidebar from './Components/Sidebar';
 import Hand from './Components/Hand';
-import handevaluation from './handevaluation';
+import handevaluation from './utils/handevaluation';
+import createDeck from './utils/createDeck';
 
-function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    const list = [];
-    list.push(Math.floor(Math.random() * (max - min + 1)) + min)
-    return list;
-}
-
-function generateDeck(){
-    const deck = [];
-    handevaluation.suits.forEach(suit => {
-        handevaluation.ranks.forEach(rank =>{
-            deck.push(Number(rank.code.toString()+suit.code.toString()));
-        });
-    });
-    return deck;
-}
-
-function shuffleDeck(deck){
-    const shuffledDeck = [];
-    while(shuffledDeck.length < deck.length){
-       const cardIndex = getRandomInt(0, deck.length-1);
-       if(!shuffledDeck.includes(deck[cardIndex])){
-           shuffledDeck.push(deck[cardIndex]);
-       } 
-    }
-    return shuffledDeck;
-}
-
-export function drawCards(shuffledDeck, num){
-    return shuffledDeck.splice(0, num);
-}
-
-function compareTwoHands(player, npc){
-    if(player > npc){
-        alert("You Win!!!");
-        return 100;
-    }
-    if(player < npc){
-        alert("You lose :(");
-        return 0;
-    }
-    if(player === npc){
-        alert("Tie!");
-        return 50;
-    }
-}
-const deck = shuffleDeck(generateDeck());
-const indexes = [];
+const deck = createDeck.shuffleDeck(createDeck.generateDeck());
+let indexes = [];
+let selectedCards = [];
 
 class App extends Component {
     constructor(props){
         super(props)
         this.state = {
-            playerHand: drawCards(deck, 5),
-            npcHand: drawCards(deck, 5),
+            playerHand: createDeck.drawCards(deck, 5),
+            npcHand: createDeck.drawCards(deck, 5),
             deck: deck,
-            allselectedCards: [],
-            uniqueselectedCards: [],
-            selectedCardIndexes: [],
             indexOccurencies: {},
+            uniqueselectedCards: [],
             raiseAmount: '',
             npcBet: '',
             playerBet: '',
+            totalBet: '',
             disableBtn: true,
             currentNpcBalance: 1000,
             currentPlayerBalance: 1000,
@@ -80,31 +34,31 @@ class App extends Component {
             }
         }  
         this.getCardInfoFromChild = this.getCardInfoFromChild.bind(this);
-        this.changeBalances = this.changeBalances.bind(this);
-        this.callCb = this.callCb.bind(this);
-        this.foldCb = this.foldCb.bind(this);
+        this.onRaise = this.onRaise.bind(this);
+        this.onCall = this.onCall.bind(this);
+        this.onFold = this.onFold.bind(this);
         this.startNewGame = this.startNewGame.bind(this);
         this.changeCards = this.changeCards.bind(this);
         this.receiveRaiseInfo = this.receiveRaiseInfo.bind(this);
         
     }
 
-    async getCardInfoFromChild(dataFromChild){
-        await this.setState({cardInfo: dataFromChild})
-        if(this.state.cardInfo.selected){
-            await this.setState((prevState) => ({
-                allselectedCards : prevState.allselectedCards.concat(this.state.cardInfo.cardCode)
-            }))
-            const uniquepickedcards = [...new Set(this.state.allselectedCards)]
-            await this.setState({uniqueselectedCards: uniquepickedcards})
-            indexes.push(this.state.playerHand.indexOf(this.state.cardInfo.cardCode))
-            await this.setState({selectedCardIndexes: indexes})
-            const occurencies = this.giveSelectedCardIndexesOccurencies(this.state.selectedCardIndexes);
-            await this.setState({indexOccurencies: occurencies})
-            if(this.state.cardInfo.selected 
-                && this.state.uniqueselectedCards.length <= 3
-                && Object.values(this.state.indexOccurencies).every(value => value === 1)){
-                await this.setState({disableBtn: false})
+    getCardInfoFromChild(dataFromChild){
+        let occurencies;
+        if(dataFromChild.selected){
+            selectedCards.push(dataFromChild.cardCode)
+            const uniquepickedcards = [...new Set(selectedCards)]
+            indexes.push(this.state.playerHand.indexOf(dataFromChild.cardCode))
+            occurencies = this.giveSelectedCardIndexesOccurencies(indexes);
+            this.setState({
+                cardInfo: dataFromChild,
+                uniqueselectedCards: uniquepickedcards,
+                indexOccurencies: occurencies
+            })
+            if(dataFromChild.selected 
+                && uniquepickedcards.length <= 3
+                && Object.values(occurencies).every(value => value === 1)){
+                this.setState({disableBtn: false})
             }
         }
     }
@@ -117,60 +71,37 @@ class App extends Component {
         return countIndexes;
     }
 
-    async changeCards(){
-        let playerhand = this.state.playerHand;
+    changeCards(){
         let uniquecards = this.state.uniqueselectedCards;
-        let randomCards = drawCards(this.state.deck, uniquecards.length);
+        let randomCards = createDeck.drawCards(this.state.deck, uniquecards.length);
         if(this.state.cardInfo.selected && this.state.uniqueselectedCards.length <= 3 ){
-            playerhand = playerhand.map(card => uniquecards.includes(card) ? randomCards.pop() : card )
-            await this.setState({ 
+            let playerhand = this.state.playerHand.map(card => uniquecards.includes(card) ? randomCards.pop() : card )
+            this.setState({ 
                 playerHand: playerhand, 
-                disableBtn: true,
-                uniqueselectedCards: []
+                disableBtn: true
             })
         }
-        console.log(this.state.playerHand)
+        indexes = [];
     }
 
-    async callCb(){
-    let result = compareTwoHands(
-        handevaluation.getEvaluationResult(this.state.playerHand), 
-        handevaluation.getEvaluationResult(this.state.npcHand))
-    if(result === 100) await this.setState({playerWins: true})
-    if(result === 0) await this.setState({npcWins: true})
-    this.betApportionment(this.state.playerWins, this.state.npcWins)
+    onCall(){
+        let result = createDeck.compareTwoHands(handevaluation.getEvaluationResult(this.state.playerHand), handevaluation.getEvaluationResult(this.state.npcHand))
+        if(result === 100) this.setState({
+            playerWins: true,
+            currentPlayerBalance: this.state.currentPlayerBalance + this.state.playerBet + this.state.npcBet
+        })
+        if(result === 0) this.setState({
+            npcWins: true,
+            currentNpcBalance: this.state.currentNpcBalance + this.state.playerBet + this.state.npcBet
+        })
     }
 
-    foldCb(){
+    onFold(){
         alert("You lose :(");
         this.setState({
             npcWins: true,
             disableBtn: true
         })
-    }
-
-    async changeBalances(dataFromChild){
-    await this.setState({
-        npcBet: dataFromChild, 
-        playerBet: dataFromChild
-    })
-    await this.setState({
-        currentNpcBalance: this.state.currentNpcBalance - this.state.raiseAmount,
-        currentPlayerBalance: this.state.currentPlayerBalance - this.state.raiseAmount
-    })
-    }
-
-    betApportionment(winner1, winner2){
-        if(winner1){
-            this.setState({
-                currentPlayerBalance: this.state.currentPlayerBalance + this.state.playerBet + this.state.npcBet
-            })
-        }
-        if(winner2){
-            this.setState({
-                currentNpcBalance: this.state.currentNpcBalance + this.state.playerBet + this.state.npcBet
-            })
-        }
     }
 
     receiveRaiseInfo(dataFromChild){
@@ -179,14 +110,32 @@ class App extends Component {
         })
     }
 
-    startNewGame(){
+    onRaise(){
+        const raiseAmount = Number(this.state.raiseAmount)
+        const allBets = {
+            player: Number(this.state.playerBet) + raiseAmount,
+            npc: Number(this.state.playerBet) + raiseAmount
+        }
         this.setState({
-            playerHand: drawCards(shuffleDeck(generateDeck()), 5),
-            npcHand: drawCards(shuffleDeck(generateDeck()), 5),
-            disableBtn: false,
-            allselectedCards: [],
+            npcBet: allBets.npc,
+            playerBet: allBets.player,
+            totalBet: allBets.npc + allBets.player,
+            currentNpcBalance: this.state.currentNpcBalance - raiseAmount,
+            currentPlayerBalance: this.state.currentPlayerBalance - raiseAmount
+        })
+    }
+
+    async startNewGame(){
+
+       await this.setState({
+            playerHand: createDeck.drawCards(createDeck.shuffleDeck(createDeck.generateDeck()), 5),
+            npcHand: createDeck.drawCards(createDeck.shuffleDeck(createDeck.generateDeck()), 5),
+            disableBtn: true,
+            indexOccurencies: {},
             uniqueselectedCards: [],
             npcBet: '',
+            playerBet: '',
+            totalBet: '',
             playerWins: false,
             npcWins: false,
             tie: false,
@@ -206,14 +155,17 @@ class App extends Component {
                     class="npc-hand" 
                     npc={true} 
                     cards={this.state.npcHand}
-                    parentcb={this.getCardInfoFromChild}
+                    receiveCardInformation={this.getCardInfoFromChild}
                     value={this.state.currentNpcBalance}
                 />
                 <Sidebar 
                     readOnly={false} 
-                    appcb={this.changeBalances}
-                    onClick={this.callCb}
-                    foldCb={this.foldCb}
+                    onRaise={this.onRaise}
+                    onCall={this.onCall}
+                    onFold={this.onFold}
+                    totalBet={this.state.totalBet}
+                    playerBet={this.state.playerBet}
+                    npcBet={this.state.npcBet}
                     startNewGame={this.startNewGame}
                     disableBtn={this.state.disableBtn}
                     changeCards={this.changeCards}
@@ -226,7 +178,7 @@ class App extends Component {
                     class="player-hand" 
                     npc={false} 
                     cards={this.state.playerHand}
-                    parentcb={this.getCardInfoFromChild}
+                    receiveCardInformation={this.getCardInfoFromChild}
                     value={this.state.currentPlayerBalance}
                     selectedCards={this.state.uniqueselectedCards}
                     player={this.state.playerHand}

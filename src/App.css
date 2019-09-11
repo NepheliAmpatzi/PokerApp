@@ -40,7 +40,8 @@ body {
     font-size: 16px;
     width: 82px;
     display: block;
-    margin: 1vw;
+    margin-bottom: 30px;
+    margin-left: 1vw;
   }
   
   .bet-placeholder {
@@ -52,6 +53,7 @@ body {
   }
   
   .call-btn {
+    margin-top: 20px !important;
     background-color: #3d7500;
     border: 1px solid #366901;
   }
@@ -70,6 +72,14 @@ body {
     background-color: sienna;
     border: 1px solid sienna;
   }
+  .change-cards-btn:disabled{
+    cursor: not-allowed;
+  }
+
+  /* .disabled-btn {
+    cursor: not-allowed;
+    background-color: blue;
+  } */
   
   .first-row-container {
     display: grid;

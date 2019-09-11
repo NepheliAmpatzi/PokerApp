@@ -1,50 +1,37 @@
-import React, { Component } from 'react';
+import React from 'react';
 import '../.././src/App.css'
 import Card from './Card';
 import Placeholder from './Placeholder';
 
-class Hand extends Component{
-    constructor(props){
-        super(props)
-        this.state={
-            cardInfo:{
-                cardCode: null,
-                selected: false
-            }
-        };
-        this.getCardInfoFromChild = this.getCardInfoFromChild.bind(this);
-    }
+function Hand(props){
 
-    async getCardInfoFromChild(dataFromChild){
-        await this.setState({cardInfo: dataFromChild})
-        this.props.parentcb(this.state.cardInfo)
-    }
-
+function getCardInfoFromChild(cardInfo){
+    console.log(cardInfo)
+    props.receiveCardInformation(cardInfo)
+}
   
-
-    render() {
         return ( 
-            <div className={this.props.class}>
+            <div className={props.class}>
             <div>
-            <div className={this.props.labelStyle}>{this.props.label}</div>
+            <div className={props.labelStyle}>{props.label}</div>
             <Placeholder 
-                class={this.props.npc ? "npc-placeholder" : "player-placeholder"}
-                value={this.props.value}
-                readOnly={this.props.readOnly}
+                class={props.npc ? "npc-placeholder" : "player-placeholder"}
+                value={props.value}
+                readOnly={props.readOnly}
                 />
             </div>
-                {this.props.cards.map((card, i) => <Card 
-                    selectedCardOccurencies={this.props.selectedCardOccurencies}
-                    parentcb={this.getCardInfoFromChild} 
+                {props.cards.map((card, i) => <Card 
+                    selectedCardOccurencies={props.selectedCardOccurencies}
+                    receiveCardInformation={getCardInfoFromChild} 
                     key={i} 
-                    selectedCards={this.props.selectedCards}
-                    player={this.props.player}
-                    npc={this.props.npc} 
+                    selectedCards={props.selectedCards}
+                    player={props.player}
+                    npc={props.npc} 
                     cardCode={card}
                     />)}
             </div>
         )
     }
-}
+
 
 export default Hand;

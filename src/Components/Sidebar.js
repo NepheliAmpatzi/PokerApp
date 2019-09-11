@@ -1,88 +1,63 @@
-import React, { Component } from 'react';
+import React from 'react';
 import '../.././src/App.css'
 import Button from './Button';
 import Placeholder from './Placeholder';
 
-class Sidebar extends Component{
-    constructor(props) {
-        super(props)
-        this.state = {
-            npcBetPlaceholder: '',
-            playerPlaceholder: '',
-            raiseInput: '',
-            totalBetAmount: ''
+function Sidebar(props){
 
-        }
-        this.receiveRaiseAmount = this.receiveRaiseAmount.bind(this);
-        this.raiseCb = this.raiseCb.bind(this);
-    }
-    
-    async raiseCb(){
-        await this.setState({
-            npcBetPlaceholder: Number(this.state.raiseInput) + Number(this.state.npcBetPlaceholder),
-            playerPlaceholder: Number(this.state.raiseInput) + Number(this.state.playerPlaceholder)
-        })
-        await this.setState({
-            totalBetAmount: Number(this.state.npcBetPlaceholder) + Number(this.state.playerPlaceholder)
-        })
-        this.props.appcb(this.state.playerPlaceholder)
+    function receiveRaiseAmount(dataFromChild){
+        props.sendInfo(dataFromChild)
     }
 
-    async receiveRaiseAmount(dataFromChild){
-        await this.setState({
-            raiseInput: dataFromChild
-        })
-        this.props.sendInfo(this.state.raiseInput)
-    }
-
-    render(){
         return (
             <div className="gameplay-button-group">
                 <Button 
                     class='raise-btn' 
                     name='Raise' 
-                    onClick={this.raiseCb}/>
+                    onClick={props.onRaise}/>
                 <Placeholder 
                     class='raise-placeholder' 
-                    parentCb={this.receiveRaiseAmount} 
+                    parentCb={receiveRaiseAmount} 
                     readOnly={false}
-                    value={this.state.raiseInput}
+                    value={props.raiseInput}
                     />
                 <Button 
                     class='call-btn' 
                     name='Call'
-                    onClick={this.props.onClick}/>
+                    onClick={props.onCall}/>
                 <Button 
                     class='fold-btn' 
                     name='Fold'
-                    onClick={this.props.foldCb}/>
+                    onClick={props.onFold}/>
                 <div className='text-style'>NPC bet</div>
                 <Placeholder 
                     class='bet-placeholder' 
                     readOnly={true} 
-                    value={this.props.emptyInputs}/>
+                    value={props.npcBet}
+                    />
                 <div className='text-style'>Player bet</div>
                 <Placeholder 
                     class='bet-placeholder' 
                     readOnly={true} 
-                    value={this.props.emptyInputs}/>
+                    value={props.playerBet}
+                    />
                 <div className='text-style'>Total amount</div>
                 <Placeholder 
                     class='bet-placeholder'
                     readOnly={true} 
-                    value={this.props.emptyInputs}/>
+                    value={props.totalBet}
+                    />
                 <Button 
                     class='new-game-btn' 
                     name='Start New Game'
-                    onClick={this.props.startNewGame}/>
+                    onClick={props.startNewGame}/>
                 <Button 
                     class='change-cards-btn' 
                     name='Change Cards'
-                    onClick={this.props.changeCards}
-                    disableBtn={this.props.disableBtn}/>
+                    onClick={props.changeCards}
+                    disableBtn={props.disableBtn}/>
             </div>
         );
     }
-}
 
 export default Sidebar;

@@ -1,18 +1,21 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import '../.././src/App.css'
-import handevaluation from '../handevaluation';
+import handevaluation from '../utils/handevaluation';
 
 
 class Card extends Component{
     constructor(props){
         super(props)
         this.state = {
-            selected: false,
             cardInfo: {
                 cardCode: this.props.cardCode,
                 selected: false
             }
-        };
+        }
+        this.cardinformation = {
+            cardCode: this.props.cardCode, 
+            selected: true
+        }
         this.selectedCard = this.selectedCard.bind(this);
     }
 
@@ -32,35 +35,31 @@ class Card extends Component{
         return suitHtml;
     }
 
-    async selectedCard(){
-        await this.setState({selected: true})
-        let cardinformation = {
-            cardCode: this.props.cardCode, 
-            selected: this.state.selected
-        }
-        await this.setState({cardInfo: cardinformation})
-        this.props.parentcb(this.state.cardInfo)
-    }
+    selectedCard(){
+        this.setState({cardInfo: this.cardinformation})
+        this.props.receiveCardInformation(this.cardinformation)
 
-    render() {
-        const {NumberL, SuitL} = handevaluation.getCardLiteralsFromCardCode(this.props.cardCode);
-        return (
-            <div className="playingCards fourColours ">
-                <a
-                onClick={this.selectedCard}
-                className={this.props.npc ?
-                 "card back" : 
-                 this.state.cardInfo.selected &&
-                  this.props.selectedCards.length <=3 &&
-                   this.props.player.includes(this.state.cardInfo.cardCode) &&
-                   Object.values(this.props.selectedCardOccurencies).every(value => value === 1) ?
-                    "selected-card card " + this.getCardCss(NumberL, SuitL) : "card " + this.getCardCss(NumberL, SuitL)}>
-                    <span className="rank">{NumberL}</span>
-                    <span className="suit">{this.getSuitSymbol(SuitL)}</span>
-                </a>
-            </div>
-        )
     }
+    render(){
+    const {NumberL, SuitL} = handevaluation.getCardLiteralsFromCardCode(this.props.cardCode);
+    return (
+        <div className="playingCards fourColours ">
+            <a
+            onClick={this.selectedCard}
+            className={this.props.npc ?
+             "card back" : 
+            this.state.cardInfo.selected &&
+            this.props.selectedCards.length <=3 &&
+            this.props.player.includes(this.state.cardInfo.cardCode) &&
+            Object.values(this.props.selectedCardOccurencies).every(value => value === 1) ?
+                "selected-card card " + this.getCardCss(NumberL, SuitL) : "card " + this.getCardCss(NumberL, SuitL)}>
+                <span className="rank">{NumberL}</span>
+                <span className="suit">{this.getSuitSymbol(SuitL)}</span>
+            </a>
+        </div>
+    )
 }
+}
+        
 
 export default Card;
