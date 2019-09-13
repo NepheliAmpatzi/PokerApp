@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Sidebar from './Components/Sidebar';
-import Hand from './Components/Hand';
+import Hand from './Components/Hand/Hand';
 import handevaluation from './utils/handevaluation';
 import createDeck from './utils/createDeck';
 
@@ -17,7 +17,7 @@ class App extends Component {
             npcHand: createDeck.drawCards(deck, 5),
             deck: deck,
             indexOccurencies: {},
-            uniqueselectedCards: [],
+            uniqueSelectedCards: [],
             raiseAmount: '',
             npcBet: '',
             playerBet: '',
@@ -32,15 +32,7 @@ class App extends Component {
                 cardCode: null,
                 selected: false
             }
-        }  
-        this.getCardInfoFromChild = this.getCardInfoFromChild.bind(this);
-        this.onRaise = this.onRaise.bind(this);
-        this.onCall = this.onCall.bind(this);
-        this.onFold = this.onFold.bind(this);
-        this.startNewGame = this.startNewGame.bind(this);
-        this.changeCards = this.changeCards.bind(this);
-        this.receiveRaiseInfo = this.receiveRaiseInfo.bind(this);
-        
+        }
     }
 
     getCardInfoFromChild(dataFromChild){
@@ -55,7 +47,7 @@ class App extends Component {
                 uniqueselectedCards: uniquepickedcards,
                 indexOccurencies: occurencies
             })
-            if(dataFromChild.selected 
+            if(dataFromChild.selected
                 && uniquepickedcards.length <= 3
                 && Object.values(occurencies).every(value => value === 1)){
                 this.setState({disableBtn: false})
@@ -72,12 +64,12 @@ class App extends Component {
     }
 
     changeCards(){
-        let uniquecards = this.state.uniqueselectedCards;
+        let uniquecards = this.state.uniqueSelectedCards;
         let randomCards = createDeck.drawCards(this.state.deck, uniquecards.length);
-        if(this.state.cardInfo.selected && this.state.uniqueselectedCards.length <= 3 ){
+        if(this.state.cardInfo.selected && this.state.uniqueSelectedCards.length <= 3 ){
             let playerhand = this.state.playerHand.map(card => uniquecards.includes(card) ? randomCards.pop() : card )
-            this.setState({ 
-                playerHand: playerhand, 
+            this.setState({
+                playerHand: playerhand,
                 disableBtn: true
             })
         }
@@ -152,35 +144,35 @@ class App extends Component {
                 <Hand
                     labelStyle="npc-label-style"
                     label="NPC Balance"
-                    class="npc-hand" 
-                    npc={true} 
+                    CSSclass="npc-hand"
+                    npc={true}
                     cards={this.state.npcHand}
-                    receiveCardInformation={this.getCardInfoFromChild}
+                    receiveCardInformation={this.getCardInfoFromChild.bind(this)}
                     value={this.state.currentNpcBalance}
                 />
-                <Sidebar 
-                    readOnly={false} 
-                    onRaise={this.onRaise}
-                    onCall={this.onCall}
-                    onFold={this.onFold}
+                <Sidebar
+                    readOnly={false}
+                    onRaise={this.onRaise.bind(this)}
+                    onCall={this.onCall.bind(this)}
+                    onFold={this.onFold.bind(this)}
                     totalBet={this.state.totalBet}
                     playerBet={this.state.playerBet}
                     npcBet={this.state.npcBet}
-                    startNewGame={this.startNewGame}
+                    startNewGame={this.startNewGame.bind(this)}
                     disableBtn={this.state.disableBtn}
-                    changeCards={this.changeCards}
+                    changeCards={this.changeCards.bind(this)}
                     emptyInputs={this.state.npcBet}
-                    sendInfo={this.receiveRaiseInfo}
+                    sendInfo={this.receiveRaiseInfo.bind(this)}
                 />
-                <Hand 
+                <Hand
                     label="Player Balance"
                     labelStyle="player-label-style"
-                    class="player-hand" 
-                    npc={false} 
+                    CSSclass="player-hand"
+                    npc={false}
                     cards={this.state.playerHand}
-                    receiveCardInformation={this.getCardInfoFromChild}
+                    receiveCardInformation={this.getCardInfoFromChild.bind(this)}
                     value={this.state.currentPlayerBalance}
-                    selectedCards={this.state.uniqueselectedCards}
+                    selectedCards={this.state.uniqueSelectedCards}
                     player={this.state.playerHand}
                     selectedCardOccurencies={this.state.indexOccurencies}
                 />

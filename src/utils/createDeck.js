@@ -1,4 +1,4 @@
-import handevaluation from './handevaluation'
+import { suits, ranks } from '../Components/Card/card.helper'
 
 function getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -10,8 +10,8 @@ function getRandomInt(min, max) {
 
 function generateDeck(){
     const deck = [];
-    handevaluation.suits.forEach(suit => {
-        handevaluation.ranks.forEach(rank =>{
+    suits.forEach(suit => {
+        ranks.forEach(rank =>{
             deck.push(Number(rank.code.toString()+suit.code.toString()));
         });
     });
@@ -24,7 +24,7 @@ function shuffleDeck(deck){
        const cardIndex = getRandomInt(0, deck.length-1);
        if(!shuffledDeck.includes(deck[cardIndex])){
            shuffledDeck.push(deck[cardIndex]);
-       } 
+       }
     }
     return shuffledDeck;
 }
