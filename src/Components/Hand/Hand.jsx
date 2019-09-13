@@ -2,8 +2,6 @@ import React, {useState} from 'react';
 import Card from '../Card/Card';
 import Placeholder from '../Placeholder';
 
-const canBeClicked = () => true;
-
 function Hand({
   cards,
   npc,
@@ -14,6 +12,7 @@ function Hand({
   readOnly
 }) {
   const [hand, setHand] = useState(cards);
+  const canBeClicked = () => !npc && cards.filter(card => card.selected).length <= 3;
 
   return (
     <div className={CSSclass}>
@@ -31,10 +30,10 @@ function Hand({
           cardCode={card}
           turned={npc}
           selected={card.selected}
-          onCardClicked={() => setHand([
+          onCardClicked={() => canBeClicked() ? setHand([
             ...hand,
             hand[i].selected = !hand[i].selected
-          ])}
+          ]) : null}
         />
         )
       )}
