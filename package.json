@@ -9,6 +9,8 @@
     "react-scripts": "0.9.5"
   },
   "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-plugin-react": "^7.14.3",
     "redux": "^4.0.4",
     "redux-devtools-extension": "^2.13.8"
   },
