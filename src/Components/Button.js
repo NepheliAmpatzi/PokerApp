@@ -1,10 +1,15 @@
 import React from 'react';
-import '../.././src/App.css'
 
-function Button(props){
-    return ( 
-        <button className={props.class} onClick={props.onClick} disabled={props.disableBtn}>{props.name}</button>
-    );
+function Button({CSSclass, onClick, disableBtn, name}) {
+  return (
+    <button
+      className={CSSclass}
+      onClick={onClick}
+      disabled={disableBtn}
+    >
+      {name}
+    </button>
+  );
 }
 
 export default Button;
